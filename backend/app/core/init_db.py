@@ -1,6 +1,8 @@
 from app.core.database import engine
 from app.models.user import User
 from app.core.database import Base
+from app.models.telemetry import TelemetryEvent
+from app.models.incident import Incident
 
 print("Creating tables...")
 
