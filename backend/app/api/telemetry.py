@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.telemetry import TelemetryEvent
 from app.schemas.telemetry import TelemetryCreate
+from app.models.incident import Incident
 
 router = APIRouter(
     prefix="/telemetry",
@@ -28,6 +29,17 @@ def create_event(
     db.commit()
 
     db.refresh(telemetry)
+    if event.severity.upper() == "HIGH":
+
+        incident = Incident(
+        title=f"{event.service_name} Failure",
+        severity=event.severity,
+        status="OPEN"
+    )
+
+        db.add(incident)
+        db.commit()
+    
 
     return {
         "message": "Telemetry Event Stored",
